@@ -18,6 +18,8 @@ import { CreateAddonProjectTool } from './minecraft/tools/CreateAddonProjectTool
 import { AddItemTool } from './minecraft/tools/AddItemTool';
 import { AddBlockTool } from './minecraft/tools/AddBlockTool';
 import { AddRecipeTool } from './minecraft/tools/AddRecipeTool';
+import { ValidateAddonTool } from './minecraft/tools/ValidateAddonTool';
+import { PackageAddonTool } from './minecraft/tools/PackageAddonTool';
 import { ConversationFlowManager } from './minecraft/conversation/ConversationFlowManager';
 import { ToolContext } from './core/tools/types';
 import { ExtensionSettings, WebviewToExtensionMessage, BackendType } from './types/messages';
@@ -253,6 +255,9 @@ function createToolRegistry(): ToolRegistry {
     registry.register(new AddItemTool());
     registry.register(new AddBlockTool());
     registry.register(new AddRecipeTool());
+    // 検証・パッケージングツール
+    registry.register(new ValidateAddonTool());
+    registry.register(new PackageAddonTool());
     return registry;
 }
 

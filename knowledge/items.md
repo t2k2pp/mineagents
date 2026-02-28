@@ -1,138 +1,149 @@
 ---
 id: items
-title: アイテムコンポーネント全リファレンス
+title: アイテムコンポーネント 完全リファレンス（公式準拠）
 category: component
-tags: [item, weapon, armor, food, tool, component, damage, durability, enchantable, wearable, cooldown, icon, display_name, max_stack_size, hand_equipped, throwable, projectile, shooter, アイテム, 武器, 防具, 食料, 道具]
+tags: [item, component, カスタムアイテム, 武器, 道具, 食料, アイテム, damage, durability, food, icon, wearable, shooter, throwable, projectile]
 mc_version_min: "1.21.0"
 mc_version_max: "1.21.60"
 created_at: "2026-02-28"
-updated_at: "2026-02-28"
-source: "https://learn.microsoft.com/en-us/minecraft/creator/reference/content/itemreference/"
-source_verified_at: "2026-02-28"
+updated_at: "2026-03-01"
+source: "https://learn.microsoft.com/en-us/minecraft/creator/reference/content/itemreference/examples/itemcomponentlist"
+source_verified_at: "2026-03-01"
 freshness_days: 180
 ---
 
-# アイテムコンポーネント全リファレンス
+# アイテムコンポーネント 完全リファレンス（公式準拠）
 
-> MC Bedrock 1.21.0〜1.21.60 対象 | Microsoft Learn | 最終確認: 2026-02-28
+> MC Bedrock 1.21.0〜1.21.60 対象 | Microsoft Learn（最終更新: 2026-01-08）| 確認: 2026-03-01
 
 ## 基本構造
 
 ```json
 {
-    "format_version": "1.21.0",
+    "format_version": "1.21.40",
     "minecraft:item": {
         "description": {
             "identifier": "namespace:item_name",
             "menu_category": {
                 "category": "equipment",
-                "group": "itemGroup.name.sword",
-                "is_hidden_in_commands": false
+                "group": "itemGroup.name.sword"
             }
         },
         "components": {
-            "minecraft:icon": { "texture": "item_texture_name" },
-            "minecraft:display_name": { "value": "item.namespace:item_name.name" }
+            "minecraft:icon": { "textures": { "default": "my_item_icon" } },
+            "minecraft:display_name": { "value": "My Item" }
         }
     }
 }
 ```
 
-## menu_category.category 有効値
+## 全コンポーネント一覧（公式: 2026-01-08時点）
 
-| category | 用途 |
-|----------|------|
-| `"construction"` | 建築ブロック |
-| `"equipment"` | 装備品（武器、防具、道具） |
-| `"items"` | その他アイテム | 
-| `"nature"` | 自然アイテム（食料含む） |
-| `"none"` | クリエイティブメニュー非表示 |
+### 基本・表示
 
-## コンポーネント一覧
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:icon` | アイコンテクスチャ | `{ "textures": { "default": "texture_key" } }` |
+| `minecraft:display_name` | 表示名 | `{ "value": "My Item" }` |
+| `minecraft:hover_text_color` | ホバーテキスト色 | `"gold"` |
+| `minecraft:rarity` | レア度表示色 | `"common"`, `"uncommon"`, `"rare"`, `"epic"` |
+| `minecraft:glint` | エンチャント光沢 | `true` / `false` |
+| `minecraft:max_stack_size` | 最大スタック数 | `64`（最大64） |
+| `minecraft:tags` | タグ付け | `{ "tags": ["minecraft:is_sword"] }` |
 
-### minecraft:icon
-- **用途**: アイテムアイコンのテクスチャ指定
-- **必須**: はい
-- **パラメータ**: `{ "texture": "string" }`
-- **注意**: `textures/item_texture.json`のtexture_dataで定義した名前を指定
+### 戦闘・攻撃
 
-### minecraft:display_name
-- **用途**: 表示名
-- **パラメータ**: `{ "value": "string" }`
-- **注意**: langファイルのキーを参照（例: `"item.myaddon:ruby_sword.name"`）
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:damage` | 攻撃力 | `{ "value": 7 }` |
+| `minecraft:hand_equipped` | 手持ち表示（斜め持ち） | `true` |
+| `minecraft:cooldown` | 使用クールダウン | `{ "category": "attack", "duration": 1.0 }` |
+| `minecraft:enchantable` | エンチャント可能 | `{ "value": 14, "slot": "sword" }` |
+| `minecraft:kinetic_weapon` | 運動エネルギー武器 | 移動速度によるダメージ変動 |
+| `minecraft:piercing_weapon` | 貫通武器 | 複数エンティティを貫通 |
+| `minecraft:swing_duration` | 振り時間 | `{ "duration": 0.5 }` |
+| `minecraft:swing_sounds` | 振り音 | 使用時のサウンド |
 
-### minecraft:max_stack_size
-- **用途**: 最大スタック数
-- **パラメータ**: `{ "value": number }`
-- **有効値**: 1〜64
-- **デフォルト**: 64
-- **注意**: 武器・防具は通常1に設定
+### 耐久・修理
 
-### minecraft:damage
-- **用途**: 近接攻撃ダメージ
-- **since**: 1.21.0
-- **deprecated**: false
-- **パラメータ**: `{ "value": number }`
-- **有効値**: 0以上の整数
-- **例**: `"minecraft:damage": { "value": 7 }`
-- **バニラ参考値**: 木の剣=4, 石の剣=5, 鉄の剣=6, ダイヤ剣=7, ネザライト剣=8
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:durability` | 耐久値 | `{ "max_durability": 250, "damage_chance": { "min": 60, "max": 100 } }` |
+| `minecraft:durability_sensor` | 耐久値センサー | 閾値でイベント発火 |
+| `minecraft:repairable` | 修理可能 | `{ "repair_items": [{ "items": ["minecraft:iron_ingot"], "repair_amount": 25 }] }` |
+| `minecraft:damage_absorption` | ダメージ吸収 | 装備時のダメージ軽減 |
 
-### minecraft:durability
-- **用途**: 耐久値
-- **パラメータ**: `{ "max_durability": number, "damage_chance": { "min": number, "max": number } }`
-- **例**: `"minecraft:durability": { "max_durability": 250 }`
-- **バニラ参考値**: 木=59, 石=131, 鉄=250, ダイヤ=1561, ネザライト=2031
+### 食べ物・消費
 
-### minecraft:hand_equipped
-- **用途**: 手持ち時の3D表示
-- **パラメータ**: `{ "value": boolean }`
-- **推奨**: 武器・道具は `true`
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:food` | 食料 | `{ "nutrition": 4, "saturation_modifier": 0.6, "can_always_eat": false }` |
+| `minecraft:use_animation` | 使用アニメーション | `"eat"`, `"drink"`, `"bow"`, `"crossbow"`, `"spear"` |
+| `minecraft:use_modifiers` | 使用時間修正 | `{ "use_duration": 1.6, "movement_modifier": 0.35 }` |
 
-### minecraft:enchantable
-- **用途**: エンチャント可能にする
-- **パラメータ**: `{ "value": number, "slot": "string" }`
-- **slot有効値**: `"sword"`, `"armor_head"`, `"armor_torso"`, `"armor_legs"`, `"armor_feet"`, `"bow"`, `"fishing_rod"`, `"flintsteel"`, `"hoe"`, `"shears"`, `"axe"`, `"pickaxe"`, `"shovel"`
-- **value**: エンチャント適性値（高いほど良いエンチャントが付きやすい）
+### 射撃・投擲
 
-### minecraft:food
-- **用途**: 食料として使用可能にする
-- **パラメータ**:
-```json
-{
-    "nutrition": 4,
-    "saturation_modifier": 0.6,
-    "can_always_eat": false,
-    "using_converts_to": "minecraft:bowl"
-}
-```
-- **nutrition**: 回復する空腹度ポイント
-- **saturation_modifier**: 隠し満腹度（`"poor"`=0.2, `"low"`=0.6, `"normal"`=1.2, `"good"`=1.6, `"max"`=2.4 または直接数値）
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:shooter` | 射撃（弓型） | `{ "max_draw_duration": 1.0, "charge_on_draw": true, "scale_power_by_draw_duration": true }` |
+| `minecraft:throwable` | 投擲可能 | `{ "do_swing_animation": true, "max_draw_duration": 0.0, "scale_power_by_draw_duration": false }` |
+| `minecraft:projectile` | 飛翔体定義 | `{ "projectile_entity": "namespace:my_arrow", "minimum_critical_power": 1.0 }` |
 
-### minecraft:wearable
-- **用途**: 装備可能にする
-- **パラメータ**: `{ "slot": "string", "protection": number }`
-- **slot有効値**: `"slot.armor.head"`, `"slot.armor.chest"`, `"slot.armor.legs"`, `"slot.armor.feet"`
-- **protection**: 防御ポイント
-- **バニラ参考値**: ダイヤヘルメット=3, チェスト=8, レギンス=6, ブーツ=3
+### 配置・設置
 
-### minecraft:cooldown
-- **用途**: 使用後のクールダウン時間
-- **パラメータ**: `{ "category": "string", "duration": number }`
-- **duration**: 秒数
-- **category**: 同じcategoryのアイテム同士でクールダウンを共有
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:block_placer` | ブロック設置 | `{ "block": "namespace:my_block" }` |
+| `minecraft:entity_placer` | エンティティ設置 | `{ "entity": "namespace:my_entity", "dispense_on": ["minecraft:grass_block"] }` |
+| `minecraft:seed` | 種（農作物設置） | `{ "crop_result": "namespace:my_crop" }` |
 
-### minecraft:throwable
-- **用途**: 投げられるアイテムにする
-- **パラメータ**: `{ "do_swing_animation": boolean, "launch_power_scale": number, "max_draw_duration": number, "max_launch_power": number, "min_draw_duration": number, "scale_power_by_draw_duration": boolean }`
+### 装備・装着
 
-### minecraft:shooter
-- **用途**: 射撃（弓のような）
-- **パラメータ**: `{ "ammunition": [{"item": "string", "use_offhand": boolean}], "charge_on_draw": boolean, "max_draw_duration": number }`
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:wearable` | 装備可能 | `{ "slot": "slot.armor.head" }` |
+| `minecraft:allow_off_hand` | オフハンド許可 | `true` |
+| `minecraft:dyeable` | 染色可能 | `{ "default_color": "#FF0000" }` |
 
-### minecraft:repairable
-- **用途**: 修理可能にする
-- **パラメータ**: `{ "repair_items": [{"items": ["string"], "repair_amount": number}] }`
+### 収納・バンドル
 
-### minecraft:use_modifiers
-- **用途**: 使用時の速度修飾
-- **パラメータ**: `{ "use_duration": number, "movement_modifier": number }`
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:bundle_interaction` | バンドル操作 | バンドルUIの有効化 |
+| `minecraft:storage_item` | 収納アイテム | アイテムをストレージとして使用 |
+| `minecraft:storage_weight_limit` | 収納重量上限 | 最大収納可能重量 |
+| `minecraft:storage_weight_modifier` | 収納重量補正 | アイテムの重量乗数 |
+
+### その他
+
+| コンポーネント | 用途 | パラメータ例 |
+|--------------|------|------------|
+| `minecraft:fuel` | 燃料 | `{ "duration": 200 }` (tick単位) |
+| `minecraft:record` | レコード | 音楽レコード |
+| `minecraft:fire_resistant` | 耐火 | `true` (溶岩で消滅しない) |
+| `minecraft:liquid_clipped` | 液体クリッピング | 水中での表示制御 |
+| `minecraft:can_destroy_in_creative` | クリエイティブで破壊可 | `true` |
+| `minecraft:should_despawn` | デスポーン | `true` |
+| `minecraft:stacked_by_data` | データ値別スタック | `true` |
+| `minecraft:interact_button` | モバイルインタラクトボタン | `true` or `"テキスト"` |
+| `minecraft:compostable` | コンポスト可能 | `{ "chance": 0.65 }` |
+
+### 非推奨/内部コンポーネント（使用不可）
+
+| コンポーネント | 状態 |
+|--------------|------|
+| `chargeable` | 非推奨 |
+| `custom_components` | 内部/Script API用 |
+| `render_offsets` | 非推奨 |
+| `use_duration` | 非推奨（`use_modifiers`に移行） |
+| `weapon` | 非推奨（`damage`に移行） |
+
+## スロット名一覧（wearable用）
+
+| スロット | 部位 |
+|---------|------|
+| `slot.armor.head` | 頭 |
+| `slot.armor.chest` | 胸 |
+| `slot.armor.legs` | 脚 |
+| `slot.armor.feet` | 足 |
+| `slot.weapon.offhand` | オフハンド |

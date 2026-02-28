@@ -8,8 +8,12 @@ import * as path from 'path';
 import { WebviewProvider } from './webview/WebviewProvider';
 import { AgentLoop, TaskState, AgentLoopEvents } from './core/agent/AgentLoop';
 import { ToolRegistry } from './core/tools/ToolRegistry';
-import { OpenAiCompatibleProvider } from './core/llm/OpenAiCompatibleProvider';
-import { OllamaBackend } from './core/llm/backends/OllamaBackend';
+import { ProviderRegistry } from './core/llm/ProviderRegistry';
+import { ReadFileTool } from './core/tools/handlers/ReadFileTool';
+import { WriteFileTool } from './core/tools/handlers/WriteFileTool';
+import { ListFilesTool } from './core/tools/handlers/ListFilesTool';
+import { AskUserTool } from './core/tools/handlers/AskUserTool';
+import { TaskCompleteTool } from './core/tools/handlers/TaskCompleteTool';
 import { ConversationFlowManager } from './minecraft/conversation/ConversationFlowManager';
 import { ToolContext } from './core/tools/types';
 import { ExtensionSettings, WebviewToExtensionMessage, BackendType } from './types/messages';
@@ -17,6 +21,7 @@ import { ExtensionSettings, WebviewToExtensionMessage, BackendType } from './typ
 let agentLoop: AgentLoop | undefined;
 let flowManager: ConversationFlowManager;
 let webviewProvider: WebviewProvider;
+const providerRegistry = new ProviderRegistry();
 
 export function activate(context: vscode.ExtensionContext): void {
     console.log('MineAgents is activating...');
@@ -223,22 +228,23 @@ function getSettings(): ExtensionSettings {
 }
 
 function createLlmProvider(settings: ExtensionSettings) {
-    // 現時点ではOllamaバックエンドのみ。今後他のバックエンドも追加
-    const backend = new OllamaBackend();
-    return new OpenAiCompatibleProvider(
-        settings.provider.baseUrl,
-        settings.provider.apiKey,
-        settings.provider.modelId,
-        backend,
-    );
+    return providerRegistry.createProvider({
+        backendType: settings.provider.backendType,
+        baseUrl: settings.provider.baseUrl,
+        apiKey: settings.provider.apiKey,
+        modelId: settings.provider.modelId,
+    });
 }
 
 function createToolRegistry(): ToolRegistry {
     const registry = new ToolRegistry();
+    // 基本ツール
+    registry.register(new ReadFileTool());
+    registry.register(new WriteFileTool());
+    registry.register(new ListFilesTool());
+    registry.register(new AskUserTool());
+    registry.register(new TaskCompleteTool());
     // TODO: Phase 2でMC Addon専用ツールを登録
-    // registry.register(new CreateProjectTool());
-    // registry.register(new AddItemTool());
-    // etc.
     return registry;
 }
 

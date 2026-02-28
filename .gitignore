@@ -1,0 +1,41 @@
+# OS/Editor
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+out/
+*.vsix
+
+# VSCode test
+.vscode-test/
+
+# Environment
+.env
+.env.local
+
+# Coverage
+coverage/
+
+# Reference repo (development only)
+vscodellm_ref/
+
+# Antigravity / Claude Code Prompts & Caches
+.agent_prompts.jsonl
+.agent_prompts.md
+.claude/
+
+# Temporary directories
+_tmp/
+.tmp/
+tmp/

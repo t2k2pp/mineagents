@@ -1,0 +1,157 @@
+# Agent Platform Catalog
+version: "1.0.0"
+store_name: "MyEnvironment Agent Templates"
+description: "AI駆動開発 (Agentic Coding) のためのフック、スキル、エージェント、ルール、ワークフローの汎用テンプレート集"
+repository: "https://github.com/t2k2pp/MyEnvironment"
+
+# =============================================================================
+# フックスクリプト (Hooks)
+# =============================================================================
+hooks:
+  description: "全ての入力プロンプトを保存・ロギングするCLIツール連携用スクリプト"
+  items:
+    - id: prompt-logger-win
+      name: "プロンプトアップロガー (Windows)"
+      path: "hooks/prompt_logger.ps1"
+      description: "Antigravity/Claude Code等のUserPromptSubmit時にプロンプトをJSONLで保存するPowerShellスクリプト"
+      
+    - id: prompt-logger-mac
+      name: "プロンプトアップロガー (Mac/Linux)"
+      path: "hooks/prompt_logger.sh"
+      description: "MacOS/Linux向けにプロンプトをJSONLで保存するBashスクリプト"
+
+# =============================================================================
+# プロジェクト・ルール (Rules)
+# =============================================================================
+rules:
+  description: "プロジェクト全体でAIエージェントに守らせる基本原則・コンテキスト"
+  items:
+    - id: base-rules
+      name: "基本プロジェクトルール"
+      path: "templates/rules/rules_template.md"
+      description: "AI開発のための全般的なルールのひな形"
+      
+    - id: shared-memory
+      name: "共有記憶 (Shared Memory) ルール"
+      path: "templates/rules/shared_memory.md"
+      description: "エージェント間のサイロ化を防ぐため、Blueprint（青写真）とTicket（チケット）の二元管理を行うルール"
+      
+    - id: spec-driven
+      name: "スペック駆動開発ルール"
+      path: "templates/rules/spec_driven_development.md"
+      description: "docs/ や .steering/ ディレクトリを用いたドキュメント・仕様先行開発の強制ルール"
+
+    - id: coding-standards
+      name: "普遍的コーディング規約"
+      path: "templates/rules/coding-standards.md"
+      description: "SOLID, DRY, KISS, YAGNI, エラーハンドリングなどの全言語共通のコーディングスタンダード"
+
+# =============================================================================
+# エージェント・スキル (Agent Skills)
+# =============================================================================
+skills:
+  description: "エージェントに特定のタスク手順やドメイン知識を付与するスキル・ガイド"
+  
+  core:
+    - id: skill-template
+      name: "スキルテンプレート"
+      path: "templates/skills/SKILL_TEMPLATE.md"
+      description: "新規スキル作成用の標準フォーマット"
+      
+    - id: steering
+      name: "ステアリング (進行管理) スキル"
+      path: "templates/skills/steering_template.md"
+      description: "task.md/tasklist.md を用いて進捗の強制トラッキング・抜け漏れ防止を行うスキル"
+      
+  domains:
+    - id: flutter-dev
+      name: "Flutter設計・開発・テストスキル"
+      path: "templates/skills/domains/flutter-development.md"
+      description: "Flutter/Dartアプリ開発の設計、Riverpod/Provider実装、ウィジェット/TDDのベストプラクティス"
+      
+    - id: node-react-dev
+      name: "Node.js (React/Vite) 開発スキル"
+      path: "templates/skills/domains/node-react-development.md"
+      description: "モダンJS/TSエコシステムにおけるフロントエンド・バックエンドの実装・テストガイド"
+      
+    - id: python-dev
+      name: "Python 開発スキル"
+      path: "templates/skills/domains/python-development.md"
+      description: "Pythonの型アノテーション(Mypy)、環境管理、PytestベースのTDD開発手法"
+
+    - id: frontend-patterns
+      name: "フロントエンド・パターン"
+      path: "templates/skills/domains/frontend-patterns.md"
+      description: "React/Next.jsのモダンな実装パターン（Custom Hooks, Render Props, パフォーマンスチューニング等）"
+      
+    - id: backend-patterns
+      name: "バックエンド・パターン"
+      path: "templates/skills/domains/backend-patterns.md"
+      description: "Express/Next.js API等のバックエンド設計（Repository/Middlewareパターン, N+1回避等）"
+      
+    - id: security-review
+      name: "セキュリティ・レビュー・ガイド"
+      path: "templates/skills/domains/security-review.md"
+      description: "OWASP対応、Secret管理、JWT処理、XSS/SQLi対策などの詳細な実装プロクティス"
+
+# =============================================================================
+# サブエージェント (Subagents)
+# =============================================================================
+subagents:
+  description: "タスクに応じた特定の役割や専門性を持つエージェントプロンプト"
+  items:
+    - id: context-manager
+      name: "コンテキスト・マネージャー設定エージェント"
+      path: "templates/subagents/context-manager.md"
+      description: "別プロセスとして呼び出され、catalog.yamlから現在のフェーズに必要なファイルパスのリストだけを抽出してPMエージェントに返却する裏方"
+      
+    - id: subagent-template
+      name: "サブエージェント設定テンプレート"
+      path: "templates/subagents/subagent_template.yaml"
+      description: "LLMモデル、ツール、役割を定義するためのベースYAML"
+      
+    - id: doc-reviewer
+      name: "ドキュメントレビュアー"
+      path: "templates/subagents/doc-reviewer.md"
+      description: "仕様書やドキュメントの完全性・一貫性をチェックする専門エージェント"
+      
+    - id: implementation-validator
+      name: "実装検証（品質チェック）"
+      path: "templates/subagents/implementation-validator.md"
+      description: "実装されたコードが仕様（Spec）に準拠しているか検証するエージェント"
+      
+    - id: architect
+      name: "アーキテクト"
+      path: "templates/subagents/architect.md"
+      description: "複雑なシステム設計、スケーラビリティ、技術選定のトレードオフを検討・決定するエージェント"
+      
+    - id: planner
+      name: "プランナー"
+      path: "templates/subagents/planner.md"
+      description: "複雑な機能のフェーズ分解、依存関係とリスク評価を実装前に行うエージェント"
+      
+    - id: security-reviewer
+      name: "セキュリティレビュアー"
+      path: "templates/subagents/security-reviewer.md"
+      description: "OWASP Top10やシークレット漏洩など、脆弱性の特定と修復を担うエージェント"
+      
+    - id: tdd-guide
+      name: "TDD ガイド"
+      path: "templates/subagents/tdd-guide.md"
+      description: "テストファースト（Red-Green-Refactor）を強制しカバレッジを維持するエージェント"
+
+# =============================================================================
+# ワークフロー (Workflows)
+# =============================================================================
+workflows:
+  description: "複数ステップにまたがる自動化プロセスや一連の開発フロー"
+  items:
+    - id: add-feature
+      name: "機能追加ワークフロー"
+      path: "templates/workflows/add-feature.md"
+      description: "設計→実装→テスト→検証までの全ステップを自動でオーケストレーションするフロー"
+      
+    - id: verify
+      name: "PR前統合検証ワークフロー"
+      path: "templates/workflows/verify.md"
+      description: "全体ビルド、型チェック、Lint、全テスト実行、シークレット監査などを行うCIワークフロー"

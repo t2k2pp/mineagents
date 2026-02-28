@@ -70,6 +70,7 @@
 - `add_item` - カスタムアイテム追加
 - `add_block` - カスタムブロック追加
 - `add_recipe` - レシピ追加
+- `create_ui_pack` - **UI改変リソースパック作成**（交易画面、HUD等）
 
 ### 検証・パッケージ
 - `validate_addon` - アドオン検証

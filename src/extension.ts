@@ -21,6 +21,7 @@ import { AddRecipeTool } from './minecraft/tools/AddRecipeTool';
 import { ValidateAddonTool } from './minecraft/tools/ValidateAddonTool';
 import { PackageAddonTool } from './minecraft/tools/PackageAddonTool';
 import { QueryKnowledgeTool } from './minecraft/tools/QueryKnowledgeTool';
+import { CreateUiPackTool } from './minecraft/tools/CreateUiPackTool';
 import { KnowledgeEngine } from './core/knowledge/KnowledgeEngine';
 import { ConversationFlowManager } from './minecraft/conversation/ConversationFlowManager';
 import { ToolContext } from './core/tools/types';
@@ -263,6 +264,8 @@ function createToolRegistry(): ToolRegistry {
     registry.register(new PackageAddonTool());
     // ナレッジ検索ツール
     registry.register(new QueryKnowledgeTool(knowledgeEngine));
+    // UI改変ツール
+    registry.register(new CreateUiPackTool());
     return registry;
 }
 

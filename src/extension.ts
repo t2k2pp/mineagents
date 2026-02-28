@@ -14,6 +14,10 @@ import { WriteFileTool } from './core/tools/handlers/WriteFileTool';
 import { ListFilesTool } from './core/tools/handlers/ListFilesTool';
 import { AskUserTool } from './core/tools/handlers/AskUserTool';
 import { TaskCompleteTool } from './core/tools/handlers/TaskCompleteTool';
+import { CreateAddonProjectTool } from './minecraft/tools/CreateAddonProjectTool';
+import { AddItemTool } from './minecraft/tools/AddItemTool';
+import { AddBlockTool } from './minecraft/tools/AddBlockTool';
+import { AddRecipeTool } from './minecraft/tools/AddRecipeTool';
 import { ConversationFlowManager } from './minecraft/conversation/ConversationFlowManager';
 import { ToolContext } from './core/tools/types';
 import { ExtensionSettings, WebviewToExtensionMessage, BackendType } from './types/messages';
@@ -244,7 +248,11 @@ function createToolRegistry(): ToolRegistry {
     registry.register(new ListFilesTool());
     registry.register(new AskUserTool());
     registry.register(new TaskCompleteTool());
-    // TODO: Phase 2でMC Addon専用ツールを登録
+    // MC Addon専用ツール
+    registry.register(new CreateAddonProjectTool());
+    registry.register(new AddItemTool());
+    registry.register(new AddBlockTool());
+    registry.register(new AddRecipeTool());
     return registry;
 }
 

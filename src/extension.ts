@@ -20,6 +20,8 @@ import { AddBlockTool } from './minecraft/tools/AddBlockTool';
 import { AddRecipeTool } from './minecraft/tools/AddRecipeTool';
 import { ValidateAddonTool } from './minecraft/tools/ValidateAddonTool';
 import { PackageAddonTool } from './minecraft/tools/PackageAddonTool';
+import { QueryKnowledgeTool } from './minecraft/tools/QueryKnowledgeTool';
+import { KnowledgeEngine } from './core/knowledge/KnowledgeEngine';
 import { ConversationFlowManager } from './minecraft/conversation/ConversationFlowManager';
 import { ToolContext } from './core/tools/types';
 import { ExtensionSettings, WebviewToExtensionMessage, BackendType } from './types/messages';
@@ -28,6 +30,7 @@ let agentLoop: AgentLoop | undefined;
 let flowManager: ConversationFlowManager;
 let webviewProvider: WebviewProvider;
 const providerRegistry = new ProviderRegistry();
+const knowledgeEngine = new KnowledgeEngine();
 
 export function activate(context: vscode.ExtensionContext): void {
     console.log('MineAgents is activating...');
@@ -258,6 +261,8 @@ function createToolRegistry(): ToolRegistry {
     // 検証・パッケージングツール
     registry.register(new ValidateAddonTool());
     registry.register(new PackageAddonTool());
+    // ナレッジ検索ツール
+    registry.register(new QueryKnowledgeTool(knowledgeEngine));
     return registry;
 }
 
@@ -296,13 +301,17 @@ function createToolContext(): ToolContext {
 }
 
 function buildSystemPrompt(context: vscode.ExtensionContext): string {
+    // KnowledgeEngine初期化（まだの場合）
+    if (knowledgeEngine.listDocuments().length === 0) {
+        knowledgeEngine.initialize(context.extensionPath);
+    }
+
     // addon-expert.mdを読み込み
     const promptPath = path.join(context.extensionPath, 'src', 'core', 'prompts', 'templates', 'addon-expert.md');
     let systemPrompt = '';
     try {
         systemPrompt = fs.readFileSync(promptPath, 'utf-8');
     } catch {
-        // ビルド後はdistから、開発中はsrcから読み込む
         systemPrompt = getDefaultSystemPrompt();
     }
 
@@ -315,6 +324,12 @@ function buildSystemPrompt(context: vscode.ExtensionContext): string {
     // インタラクションモード情報を追加
     const settings = getSettings();
     systemPrompt += `\n\n## 現在のインタラクションモード: ${settings.agent.interactionMode}`;
+
+    // ナレッジ鮮度レポート（古い情報があれば警告）
+    const freshnessReport = knowledgeEngine.getFreshnessReport();
+    if (freshnessReport.includes('⚠️')) {
+        systemPrompt += `\n\n## ナレッジ鮮度警告\n${freshnessReport}`;
+    }
 
     return systemPrompt;
 }

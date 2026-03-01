@@ -74,15 +74,38 @@ body {
     display: inline-block;
 }
 
-.status-dot.idle { background: var(--text-secondary); }
-.status-dot.thinking { background: var(--warning); animation: pulse 1s infinite; }
-.status-dot.executing { background: var(--text-accent); animation: pulse 1s infinite; }
-.status-dot.completed { background: var(--success); }
-.status-dot.error { background: var(--error); }
+.status-dot.idle {
+    background: var(--text-secondary);
+}
+
+.status-dot.thinking {
+    background: var(--warning);
+    animation: pulse 1s infinite;
+}
+
+.status-dot.executing {
+    background: var(--text-accent);
+    animation: pulse 1s infinite;
+}
+
+.status-dot.completed {
+    background: var(--success);
+}
+
+.status-dot.error {
+    background: var(--error);
+}
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
 }
 
 /* Chat Area */
@@ -273,4 +296,265 @@ body {
 .quick-action:hover {
     border-color: var(--text-accent);
     color: var(--text-accent);
+}
+
+/* App Toolbar */
+.app-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.app-toolbar-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.app-toolbar-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-input);
+}
+
+/* Settings View */
+.settings-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settings-title {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.settings-footer {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Settings Section */
+.settings-section {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settings-section:last-child {
+    border-bottom: none;
+}
+
+.settings-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-accent);
+}
+
+/* Settings Field */
+.settings-field {
+    margin-bottom: 12px;
+}
+
+.settings-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.settings-input {
+    width: 100%;
+    padding: 6px 10px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    outline: none;
+}
+
+.settings-input:focus {
+    border-color: var(--text-accent);
+}
+
+.settings-input--short {
+    width: 120px;
+}
+
+.settings-select {
+    width: 100%;
+    padding: 6px 10px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    outline: none;
+    cursor: pointer;
+}
+
+.settings-select:focus {
+    border-color: var(--text-accent);
+}
+
+.settings-select--flex {
+    flex: 1;
+}
+
+.settings-field-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.settings-hint {
+    display: block;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.settings-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size);
+    cursor: pointer;
+}
+
+/* Settings Buttons */
+.settings-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s;
+}
+
+.settings-btn--primary {
+    background: var(--button-bg);
+    color: var(--button-fg);
+}
+
+.settings-btn--primary:hover {
+    background: var(--button-hover);
+}
+
+.settings-btn--secondary {
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.settings-btn--secondary:hover {
+    border-color: var(--text-secondary);
+}
+
+.settings-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.settings-btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.settings-btn-icon:hover {
+    color: var(--text-primary);
+    background: var(--bg-input);
+}
+
+.settings-btn-icon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Settings Status */
+.settings-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.settings-status--ok {
+    color: var(--success);
+}
+
+.settings-status--error {
+    color: var(--error);
+}
+
+/* Settings Empty State */
+.settings-empty-state {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-input);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+/* Settings Model Info */
+.settings-model-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    padding: 4px 8px;
+    background: var(--bg-input);
+    border-radius: 4px;
 }

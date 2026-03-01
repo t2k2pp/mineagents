@@ -13,8 +13,28 @@ export interface ChatMessage {
     toolCalls?: Array<{ id: string; name: string; status: string; result?: string }>;
 }
 
+export interface ModelInfo {
+    id: string;
+    name: string;
+    contextWindow?: number;
+    description?: string;
+}
+
+export type BackendType = 'ollama' | 'lmstudio' | 'openai' | 'gemini' | 'generic';
+
 export type ViewMode = 'chat' | 'settings' | 'history';
 export type AgentState = 'idle' | 'thinking' | 'executing' | 'waiting_approval' | 'waiting_input' | 'completed' | 'error';
+
+interface SettingsLocal {
+    backendType: BackendType;
+    baseUrl: string;
+    apiKey: string;
+    modelId: string;
+    maxIterations: number;
+    temperature: number;
+    sdEnabled: boolean;
+    sdBaseUrl: string;
+}
 
 interface AppState {
     // UI
@@ -40,7 +60,29 @@ interface AppState {
     // Progress
     progress: { step: number; total: number; description: string } | null;
     setProgress: (progress: { step: number; total: number; description: string } | null) => void;
+
+    // Models (from LLM server)
+    models: ModelInfo[];
+    setModels: (models: ModelInfo[]) => void;
+    loadingModels: boolean;
+    setLoadingModels: (loading: boolean) => void;
+
+    // Settings (local draft)
+    settingsLocal: SettingsLocal;
+    updateSettingsLocal: (partial: Partial<SettingsLocal>) => void;
+    initSettingsLocal: (s: SettingsLocal) => void;
 }
+
+const DEFAULT_SETTINGS: SettingsLocal = {
+    backendType: 'ollama',
+    baseUrl: 'http://localhost:11434',
+    apiKey: '',
+    modelId: '',
+    maxIterations: 25,
+    temperature: 0,
+    sdEnabled: false,
+    sdBaseUrl: 'http://localhost:7860',
+};
 
 export const useAppStore = create<AppState>((set) => ({
     // UI
@@ -83,4 +125,18 @@ export const useAppStore = create<AppState>((set) => ({
     // Progress
     progress: null,
     setProgress: (progress) => set({ progress }),
+
+    // Models
+    models: [],
+    setModels: (models) => set({ models }),
+    loadingModels: false,
+    setLoadingModels: (loading) => set({ loadingModels: loading }),
+
+    // Settings
+    settingsLocal: { ...DEFAULT_SETTINGS },
+    updateSettingsLocal: (partial) => set((state) => ({
+        settingsLocal: { ...state.settingsLocal, ...partial },
+    })),
+    initSettingsLocal: (s) => set({ settingsLocal: s }),
 }));
+

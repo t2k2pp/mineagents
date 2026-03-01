@@ -97,6 +97,10 @@ async function handleWebviewMessage(
         case 'listModels':
             await handleListModels(context);
             break;
+        case 'updateSettings':
+            await handleUpdateSettings(msg.settings);
+            sendStateToWebview(context);
+            break;
         case 'newConversation':
             agentLoop?.reset();
             flowManager.reset();
@@ -206,6 +210,24 @@ async function handleListModels(context: vscode.ExtensionContext): Promise<void>
             type: 'error',
             error: `Failed to list models: ${error instanceof Error ? error.message : String(error)}`,
         });
+    }
+}
+
+async function handleUpdateSettings(partial: Partial<ExtensionSettings>): Promise<void> {
+    const config = vscode.workspace.getConfiguration('mineagents');
+    if (partial.provider) {
+        if (partial.provider.backendType !== undefined) { await config.update('provider.backendType', partial.provider.backendType, true); }
+        if (partial.provider.baseUrl !== undefined) { await config.update('provider.baseUrl', partial.provider.baseUrl, true); }
+        if (partial.provider.apiKey !== undefined) { await config.update('provider.apiKey', partial.provider.apiKey, true); }
+        if (partial.provider.modelId !== undefined) { await config.update('provider.modelId', partial.provider.modelId, true); }
+    }
+    if (partial.agent) {
+        if (partial.agent.maxIterations !== undefined) { await config.update('agent.maxIterations', partial.agent.maxIterations, true); }
+        if (partial.agent.temperature !== undefined) { await config.update('agent.temperature', partial.agent.temperature, true); }
+    }
+    if (partial.stableDiffusion) {
+        if (partial.stableDiffusion.enabled !== undefined) { await config.update('stableDiffusion.enabled', partial.stableDiffusion.enabled, true); }
+        if (partial.stableDiffusion.baseUrl !== undefined) { await config.update('stableDiffusion.baseUrl', partial.stableDiffusion.baseUrl, true); }
     }
 }
 

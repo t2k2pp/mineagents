@@ -4,7 +4,6 @@
 // ============================================================
 
 import * as vscode from 'vscode';
-import * as path from 'path';
 
 export class WebviewProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'mineagents.chatView';
@@ -36,6 +35,7 @@ export class WebviewProvider implements vscode.WebviewViewProvider {
             localResourceRoots: [
                 vscode.Uri.joinPath(this.extensionUri, 'dist'),
                 vscode.Uri.joinPath(this.extensionUri, 'webview-ui', 'dist'),
+                vscode.Uri.joinPath(this.extensionUri, 'node_modules', '@vscode', 'codicons', 'dist'),
             ],
         };
 
@@ -50,22 +50,41 @@ export class WebviewProvider implements vscode.WebviewViewProvider {
         // Webview UI のビルド出力パスを参照
         const webviewDistPath = vscode.Uri.joinPath(this.extensionUri, 'webview-ui', 'dist');
 
-        // 開発中は仮のHTML、ビルド後はVite出力を使用
         const scriptUri = webview.asWebviewUri(
             vscode.Uri.joinPath(webviewDistPath, 'assets', 'index.js'),
         );
         const styleUri = webview.asWebviewUri(
             vscode.Uri.joinPath(webviewDistPath, 'assets', 'index.css'),
         );
+
+        // VS Code Codicons (vscodellm と同じ方法)
+        const codiconsUri = webview.asWebviewUri(
+            vscode.Uri.joinPath(
+                this.extensionUri,
+                'node_modules',
+                '@vscode',
+                'codicons',
+                'dist',
+                'codicon.css',
+            ),
+        );
+
         const nonce = getNonce();
+        const cspSource = webview.cspSource;
 
         return `<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; img-src ${webview.cspSource} data:;">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'none';
+                   style-src ${cspSource} 'unsafe-inline';
+                   font-src ${cspSource};
+                   script-src 'nonce-${nonce}';
+                   img-src ${cspSource} data:;">
     <link rel="stylesheet" href="${styleUri}">
+    <link rel="stylesheet" href="${codiconsUri}">
     <title>MineAgents</title>
 </head>
 <body>
@@ -84,3 +103,4 @@ function getNonce(): string {
     }
     return text;
 }
+

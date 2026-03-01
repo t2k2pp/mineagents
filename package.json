@@ -178,6 +178,7 @@
         "vitest": "^1.2.0"
     },
     "dependencies": {
+        "@vscode/codicons": "^0.0.44",
         "ajv": "^8.12.0",
         "archiver": "^7.0.0",
         "gpt-tokenizer": "^2.1.0",

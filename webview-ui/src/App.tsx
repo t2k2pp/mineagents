@@ -88,19 +88,6 @@ export const App: React.FC = () => {
 
     return (
         <div className="app">
-            {/* ヘッダーバー：設定ボタン */}
-            {viewMode === 'chat' && (
-                <div className="app-toolbar">
-                    <button
-                        className="app-toolbar-btn"
-                        onClick={() => setViewMode('settings')}
-                        title="設定を開く"
-                    >
-                        <i className="codicon codicon-gear" />
-                    </button>
-                </div>
-            )}
-
             {viewMode === 'chat' && <ChatView />}
             {viewMode === 'settings' && <SettingsView />}
         </div>

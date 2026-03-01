@@ -4,7 +4,7 @@ import { InputArea } from './InputArea';
 import { vscode } from '../../vscode';
 
 export const ChatView: React.FC = () => {
-    const { messages, agentState, progress } = useAppStore();
+    const { messages, agentState, progress, setViewMode } = useAppStore();
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // 自動スクロール
@@ -38,6 +38,13 @@ export const ChatView: React.FC = () => {
                     {agentState === 'completed' && '完了'}
                     {agentState === 'error' && 'エラー'}
                 </span>
+                <button
+                    className="app-toolbar-btn"
+                    onClick={() => setViewMode('settings')}
+                    title="設定"
+                >
+                    <i className="codicon codicon-gear" />
+                </button>
             </div>
 
             {/* Chat Messages or Welcome */}
